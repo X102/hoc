@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kết nối tri thức</title>
+<meta name="description" content="Lộ trình 6 tháng chuẩn bị phỏng vấn: toán ứng dụng, vật lý và tin học, UAV và xử lý ảnh, AI và dữ liệu vũ trụ, ngôn ngữ. Sách, khoá học, video YouTube/RuTube, tạp chí, thẻ ôn phỏng vấn.">
+<meta name="theme-color" content="#F3F5F0">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,500;0,700;0,800;1,500&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<script>
+  // áp dụng giao diện sáng/tối trước khi vẽ trang để tránh nháy màu
+  (function(){try{var s=JSON.parse(localStorage.getItem('ktt-state-v1')||'{}');if(s.theme&&s.theme!=='auto')document.documentElement.setAttribute('data-theme',s.theme);}catch(e){}})();
+</script>
+</head>
+<body>
+<a class="skip" href="#app">Bỏ qua thanh điều hướng</a>
+
+<header class="top">
+  <div class="top-in">
+    <a class="brand" href="#/" aria-label="Kết nối tri thức — trang chủ">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 4 L28 26 H4 Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><circle cx="16" cy="19" r="2.6" fill="currentColor"/></svg>
+      <span>Kết nối tri thức</span>
+    </a>
+    <div class="search" role="search">
+      <label class="sr" for="q">Tìm môn học hoặc tài liệu</label>
+      <input id="q" type="search" placeholder="Tìm môn học, tài liệu, chủ đề" autocomplete="off">
+      <div id="qres" class="qres" hidden></div>
+    </div>
+    <nav class="nav" aria-label="Chính">
+      <a href="#/" data-nav="home">Tổng quan</a>
+      <a href="#/plan" data-nav="plan">Lộ trình</a>
+      <a href="#/tracks" data-nav="tracks">Môn học</a>
+      <a href="#/library" data-nav="library">Thư viện</a>
+      <a href="#/cards" data-nav="cards">Ôn phỏng vấn</a>
+      <a href="#/notes" data-nav="notes">Ghi chú</a>
+    </nav>
+    <div class="top-tools">
+      <button class="icon-btn" id="themeBtn" type="button" title="Đổi giao diện sáng/tối" aria-label="Đổi giao diện sáng/tối">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7a5 5 0 0 0 0 10z" fill="currentColor"/></svg>
+      </button>
+      <button class="icon-btn" id="settingsBtn" type="button" title="Sao lưu và cài đặt" aria-label="Sao lưu và cài đặt">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="7" r="2.3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="8" cy="17" r="2.3" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="app" tabindex="-1"></main>
+
+<footer class="foot">
+  <p>Tiến độ, ghi chú và thẻ ôn được lưu ngay trong trình duyệt của bạn. Dùng <button class="linkish" type="button" data-act="open-settings">Sao lưu</button> để chuyển sang máy khác.</p>
+  <p>Xây dựng từ tài liệu «Подготовка к работе». <a href="#/guide">Hướng dẫn sử dụng và đưa lên GitHub</a>. Phím tắt: <kbd>/</kbd> tìm kiếm, <kbd>?</kbd> danh sách phím tắt.</p>
+</footer>
+
+<!-- Pomodoro -->
+<aside class="pomo" id="pomo" aria-label="Đồng hồ Pomodoro">
+  <button class="pomo-pill" id="pomoPill" type="button" aria-expanded="false" aria-controls="pomoPanel">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 9v4l3 2M9 2h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+    <span id="pomoTime">25:00</span>
+  </button>
+  <div class="pomo-panel" id="pomoPanel" hidden>
+    <div class="pomo-mode" id="pomoMode">Phiên học</div>
+    <div class="pomo-big" id="pomoBig">25:00</div>
+    <label class="pomo-lab" for="pomoSub">Đang học môn</label>
+    <select id="pomoSub"></select>
+    <div class="pomo-row">
+      <button class="btn btn-primary" id="pomoStart" type="button">Bắt đầu</button>
+      <button class="btn" id="pomoReset" type="button">Đặt lại</button>
+      <button class="btn" id="pomoSkip" type="button" title="Chuyển sang nghỉ / học">Chuyển</button>
+    </div>
+    <div class="pomo-row pomo-set">
+      <label>Học <input type="number" id="pomoWork" min="5" max="90" step="5"> phút</label>
+      <label>Nghỉ <input type="number" id="pomoBreak" min="1" max="30"> phút</label>
+    </div>
+    <p class="pomo-today" id="pomoToday"></p>
+  </div>
+</aside>
+
+<!-- Hộp thoại cài đặt -->
+<dialog id="settings" class="dlg" aria-labelledby="setTitle">
+  <form method="dialog" class="dlg-in">
+    <h2 id="setTitle">Sao lưu và cài đặt</h2>
+    <p class="muted">Mọi dữ liệu nằm trong trình duyệt này. Xuất tệp sao lưu để mang sang máy tính hay điện thoại khác, rồi nhập lại ở đó.</p>
+    <div class="dlg-grid">
+      <button class="btn btn-primary" type="button" data-act="export">Xuất tệp sao lưu (.json)</button>
+      <label class="btn file-btn">Nhập tệp sao lưu<input type="file" id="importFile" accept="application/json,.json" hidden></label>
+      <button class="btn" type="button" data-act="export-notes">Xuất ghi chú (.md)</button>
+      <button class="btn" type="button" data-act="export-ics">Xuất lộ trình ra lịch (.ics)</button>
+    </div>
+    <h3>Giao diện</h3>
+    <div class="seg" role="radiogroup" aria-label="Giao diện">
+      <label><input type="radio" name="theme" value="auto"> Theo hệ thống</label>
+      <label><input type="radio" name="theme" value="light"> Sáng</label>
+      <label><input type="radio" name="theme" value="dark"> Tối</label>
+    </div>
+    <h3>Xoá dữ liệu</h3>
+    <p class="muted">Xoá toàn bộ tiến độ, ghi chú, thẻ và nhật ký học trên trình duyệt này.</p>
+    <button class="btn btn-danger" type="button" data-act="reset" id="resetBtn">Xoá toàn bộ dữ liệu</button>
+    <div class="dlg-foot"><button class="btn" value="close">Đóng</button></div>
+  </form>
+</dialog>
+
+<!-- Hộp thoại phím tắt -->
+<dialog id="keys" class="dlg" aria-labelledby="keysTitle">
+  <form method="dialog" class="dlg-in">
+    <h2 id="keysTitle">Phím tắt</h2>
+    <table class="keys">
+      <tr><td><kbd>/</kbd></td><td>Tìm kiếm</td></tr>
+      <tr><td><kbd>g</kbd> rồi <kbd>h</kbd> <kbd>p</kbd> <kbd>m</kbd> <kbd>l</kbd> <kbd>c</kbd> <kbd>n</kbd></td><td>Tổng quan, Lộ trình, Môn học, Thư viện, Ôn phỏng vấn, Ghi chú</td></tr>
+      <tr><td><kbd>t</kbd></td><td>Bật/tạm dừng Pomodoro</td></tr>
+      <tr><td><kbd>Space</kbd></td><td>Lật thẻ (khi ôn)</td></tr>
+      <tr><td><kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd></td><td>Chưa nhớ, nhớ lờ mờ, nhớ rõ</td></tr>
+      <tr><td><kbd>Esc</kbd></td><td>Đóng hộp thoại, kết quả tìm kiếm</td></tr>
+    </table>
+    <div class="dlg-foot"><button class="btn" value="close">Đóng</button></div>
+  </form>
+</dialog>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script src="assets/data.js"></script>
+<script src="assets/data-extra.js"></script>
+<script src="assets/cards.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
